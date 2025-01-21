@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student List</title>
+    <style>
+        .male {
+            background-color: yellow;
+        }
+        .female {
+            background-color: pink;
+        }
+    </style>
+</head>
+<script>
+    function taithongtin() {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "dataset.xml", true);
+        xhr.send();
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var xmlDoc = xhr.responseXML;
+                var sinhvien = xmlDoc.getElementsByTagName("sinhvien");
+                var table = document.getElementById("studentTable");
+
+                for (var i = 0; i < sinhvien.length; i++) {
+                    var row = table.insertRow();
+                    
+                    var mssv = sinhvien[i].getElementsByTagName("mssv")[0].childNodes[0].nodeValue;
+                    var hoTen = sinhvien[i].getElementsByTagName("hoTen")[0].childNodes[0].nodeValue;
+                    var ngaySinh = sinhvien[i].getElementsByTagName("ngaySinh")[0].childNodes[0].nodeValue;
+                    var gioiTinh = sinhvien[i].getElementsByTagName("gioiTinh")[0].childNodes[0].nodeValue;
+                    var hinh = sinhvien[i].getElementsByTagName("hinh")[0].childNodes[0].nodeValue;
+
+                    row.insertCell(0).innerHTML = mssv;
+                    row.insertCell(1).innerHTML = hoTen;
+                    row.insertCell(2).innerHTML = ngaySinh;
+                    row.insertCell(3).innerHTML = gioiTinh;
+                    row.insertCell(4).innerHTML = `<img src="${hinh}" alt="Student Image" width="50">`;
+
+                    // Apply gender-based row color
+                    if (gioiTinh === "Nam") {
+                        row.classList.add("male");
+                    } else if (gioiTinh === "Nữ") {
+                        row.classList.add("female");
+                    }
+                }
+            }
+        }
+    }
+</script>
+<body>
+    <button onclick="taithongtin()">Load Student Info</button>
+    <table id="studentTable" border="1">
+        <tr>
+            <th>Mã</th>
+            <th>Tên</th>
+            <th>Ngày Sinh</th>
+            <th>Giới Tính</th>
+            <th>Hình</th>
+        </tr>
+    </table>
+</body>
+</html>
